@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "cv.scheduling";
+option java_outer_classname = "SchedulingServiceProto";
+
+package scheduling;
+
+// Interface exported by the server.
+service SchedulingService {
+  // Unary RPC
+  rpc Schedule(SchedulingRequest) returns (SchedulingResultResponse) {}
+
+  // Server-side Streaming RPC
+  rpc CheckAvailability(SchedulingRequest) returns (stream ResourceAvailabilityResponse) {}
+
+  // Client-side Streaming RPC
+  rpc BatchSchedule(stream SchedulingRequest) returns (SchedulingResultResponse) {}
+}
+
+message SchedulingRequest {
+  string course_id = 1;
+  string teacher_id = 2;
+  repeated string equipment = 3;
+  int32 num_students = 4;
+  int64 start_time = 5;
+  int64 end_time = 6;
+}
+
+message ResourceAvailabilityResponse {
+  string resource_id = 1;
+  repeated int64 available_times = 2;
+}
+
+message SchedulingResultResponse {
+  bool success = 1;
+  string message = 2;
+}
+

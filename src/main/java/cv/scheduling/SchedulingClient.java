@@ -25,22 +25,37 @@ public class SchedulingClient {
 		blockingStub = SchedulingServiceGrpc.newBlockingStub(channel);
 		asyncStub = SchedulingServiceGrpc.newStub(channel);
 		schedule("1","Michale","pen",10000,20000);
+		
+		checkAvailabilityBlocking();
+		checkAvailabilityAsync();
+		
+		
+		batchSchedule();
+		
+		
+		
+		
 	}
 	
 	
 	//unary rpc
 	public static void schedule(String course, String teacher, String equipment, long start_time, long end_time) {
-		SchedulingRequest request = SchedulingRequest.newBuilder()
-									.setCourseId(course) 
-									.setTeacherId(teacher)
-									.setEquipment(1,equipment)
-									.setStartTime(start_time)
-									.setEndTime(end_time)
-									.build();
+	    SchedulingRequest request = SchedulingRequest.newBuilder()
+	            .setCourseId(course)
+	            .setTeacherId(teacher)
+	            .addEquipment(equipment)
+	            .setStartTime(start_time)
+	            .setEndTime(end_time)
+	            .build();
 
-		SchedulingResultResponse response = blockingStub.schedule(request);
-		System.out.println("Success or not: " + response.getSuccess() + "; mes: " + response.getMessage());
+	    try {
+	        SchedulingResultResponse response = blockingStub.schedule(request);
+	        System.out.println("Success or not: " + response.getSuccess() + "; mes: " + response.getMessage());
+	    } catch (StatusRuntimeException e) {
+	        System.err.println("RPC failed: " + e.getStatus());
+	    }
 	}
+
 
 	
 	
@@ -48,50 +63,77 @@ public class SchedulingClient {
 	
 	
 	// blocking server-streaming
-	public static void checkAvailabilityBlocking(SchedulingRequest request) { 
-		try {
-			Iterator<ResourceAvailabilityResponse> responses = blockingStub.checkAvailability(request);
+	public static void checkAvailabilityBlocking() {
+	    SchedulingRequest request = SchedulingRequest.newBuilder()
+	            .setCourseId("course1")
+	            .setTeacherId("teacher1")
+	            .addEquipment("equipment1")
+	            .setNumStudents(30)
+	            .setStartTime(1647025200L)
+	            .setEndTime(1647032400L)
+	            .build();
 
-			while (responses.hasNext()) {
-				ResourceAvailabilityResponse temp = responses.next();
-				System.out.println("resource_id: " + temp.getResourceId() + " available_times: " + temp.getAvailableTimesList());
-			}
+	    Iterator<ResourceAvailabilityResponse> responses = null;
 
-		} catch (StatusRuntimeException e) {
-			e.printStackTrace();
-		}
+	    try {
+	        responses = blockingStub.checkAvailability(request);
+	    } catch (StatusRuntimeException e) {
+	        e.printStackTrace();
+	        return;
+	    }
+
+	    while (responses.hasNext()) {
+	        ResourceAvailabilityResponse temp = responses.next();
+	        System.out.println("resource_id: " + temp.getResourceId() + " available_times: " + temp.getAvailableTimesList());
+	    }
 	}
+
+	
+	
+
 
 	// asynchronous server-streaming
-	public static void checkAvailabilityAsync(SchedulingRequest request) {
-	StreamObserver<ResourceAvailabilityResponse> responseObserver = new StreamObserver<ResourceAvailabilityResponse>() {
+	public static void checkAvailabilityAsync() {
 
-	    @Override
-	    public void onNext(ResourceAvailabilityResponse value) {
-	        System.out.println("received resource_id: " + value.getResourceId() + " available_times: " + value.getAvailableTimesList());
+	    SchedulingRequest request = SchedulingRequest.newBuilder()
+	        .setCourseId("course2")
+	        .setTeacherId("teacher2")
+	        .addEquipment("equipment2")
+	        .setNumStudents(20)
+	        .setStartTime(1647025200L)
+	        .setEndTime(1647032400L)
+	        .build();
+
+	    StreamObserver<ResourceAvailabilityResponse> responseObserver = new StreamObserver<ResourceAvailabilityResponse>() {
+
+	        @Override
+	        public void onNext(ResourceAvailabilityResponse value) {
+	            System.out.println("received resource_id: " + value.getResourceId() + " available_times: " + value.getAvailableTimesList());
+	        }
+
+	        @Override
+	        public void onError(Throwable t) {
+	            t.printStackTrace();
+
+	        }
+
+	        @Override
+	        public void onCompleted() {
+	            System.out.println("stream is completed ...");
+	        }
+
+	    };
+
+	    try {
+	        asyncStub.checkAvailability(request, responseObserver);
+	        Thread.sleep(15000);
+	    } catch (InterruptedException e) {
+	        e.printStackTrace();
+	    } catch (StatusRuntimeException e) {
+	        e.printStackTrace();
 	    }
-
-	    @Override
-	    public void onError(Throwable t) {
-	        t.printStackTrace();
-
-	    }
-
-	    @Override
-	    public void onCompleted() {
-	        System.out.println("stream is completed ...");
-	    }
-
-	};
-
-	asyncStub.checkAvailability(request, responseObserver);
-
-	try {
-	    Thread.sleep(15000);
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
 	}
-	}
+
 	
 	
 	

@@ -6,6 +6,7 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.logging.Logger;
 
 public class SchedulingServer {
@@ -47,12 +48,17 @@ public class SchedulingServer {
         }
     }
 
+    
+    
     public static void main(String[] args) throws IOException, InterruptedException {
-        int port = 50051;
-        final SchedulingServer server = new SchedulingServer(port);
-        server.start();
-        server.blockUntilShutdown();
+    	  int port = 50051;
+          final SchedulingServer server = new SchedulingServer(port);
+          server.start();
+          server.blockUntilShutdown();
+
     }
+    
+    
 
     static class SchedulingServiceImpl extends SchedulingServiceGrpc.SchedulingServiceImplBase {
         @Override
@@ -79,7 +85,7 @@ public class SchedulingServer {
         }
 
         @Override
-        public StreamObserver<SchedulingRequest> batchSchedule(StreamObserver<SchedulingResultResponse> responseObserver) {
+        public StreamObserver<SchedulingRequest> batchSchedule(StreamObserver<SchedulingResultResponse> responseObserver) {   
             // TODO: Implement batch scheduling logic based on the request data received as a stream
             return new StreamObserver<SchedulingRequest>() {
                 @Override
@@ -104,4 +110,10 @@ public class SchedulingServer {
             };
         }
     }
+    
+    
+    
+    
+    
+    
 }

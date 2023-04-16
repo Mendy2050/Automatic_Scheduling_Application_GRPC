@@ -16,21 +16,35 @@ public class SchedulingClient {
 	private static ManagedChannel channel;
 
 	public static void main(String[] args) {
-		channel = ManagedChannelBuilder.
-								forAddress("localhost", 50051)
-								.usePlaintext()
-								.build();
+		try {
+			channel = ManagedChannelBuilder.
+									forAddress("localhost", 50051)
+									.usePlaintext()
+									.build();
 
-		//stubs -- generate from proto
-		blockingStub = SchedulingServiceGrpc.newBlockingStub(channel);
-		asyncStub = SchedulingServiceGrpc.newStub(channel);
-		schedule("1","Michale","pen",10000,20000);
+			//stubs -- generate from proto
+			blockingStub = SchedulingServiceGrpc.newBlockingStub(channel);
+			asyncStub = SchedulingServiceGrpc.newStub(channel);
+			schedule("1","Michale","pen",10000,20000);
+			
+			checkAvailabilityBlocking();
+			checkAvailabilityAsync();
+			
+			
+			batchSchedule();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
-		checkAvailabilityBlocking();
-		checkAvailabilityAsync();
 		
-		
-		batchSchedule();
 		
 		
 		
@@ -127,11 +141,15 @@ public class SchedulingClient {
 	    try {
 	        asyncStub.checkAvailability(request, responseObserver);
 	        Thread.sleep(15000);
+	      
+	        
 	    } catch (InterruptedException e) {
 	        e.printStackTrace();
 	    } catch (StatusRuntimeException e) {
 	        e.printStackTrace();
-	    }
+	    } 
+	    
+	    
 	}
 
 	
@@ -212,8 +230,8 @@ public class SchedulingClient {
 
 	
 	
-	public void shutdown() throws InterruptedException {
-		channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-	}
+//	public void shutdown() throws InterruptedException {
+//		channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+//	}
 }
 

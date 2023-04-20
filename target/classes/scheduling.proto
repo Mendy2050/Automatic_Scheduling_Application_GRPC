@@ -1,39 +1,147 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "cv.scheduling";
-option java_outer_classname = "SchedulingServiceProto";
+option java_package = "edu.scheduling";
+option java_outer_classname = "SchedulingServiceImpl";
 
 package scheduling;
 
-// Interface exported by the server.
-service SchedulingService {
-  // Unary RPC
-  rpc Schedule(SchedulingRequest) returns (SchedulingResultResponse) {}
+// Student Management Service
+service StudentManagement {
+  // Add a student schedule (Unary RPC)
+  rpc AddStudentSchedule(AddStudentScheduleRequest) returns (AddStudentScheduleResponse);
 
-  // Server-side Streaming RPC
-  rpc CheckAvailability(SchedulingRequest) returns (stream ResourceAvailabilityResponse) {}
+  // Get a student schedule by student ID (Unary RPC)
+  rpc GetStudentScheduleById(GetStudentScheduleByIdRequest) returns (GetStudentScheduleByIdResponse);
 
-  // Client-side Streaming RPC
-  rpc BatchSchedule(stream SchedulingRequest) returns (SchedulingResultResponse) {}
+  // Update student schedules in bulk (Client Streaming RPC)
+  rpc UpdateStudentSchedules(stream UpdateStudentScheduleRequest) returns (UpdateStudentScheduleResponse);
 }
 
-message SchedulingRequest {
-  string course_id = 1;
-  string teacher_id = 2;
-  repeated string equipment = 3;
-  int32 num_students = 4;
-  int64 start_time = 5;
-  int64 end_time = 6;
+// Course Management Service
+service CourseManagement {
+  // Add a course (Unary RPC)
+  rpc AddCourse(AddCourseScheduleRequest) returns (AddCourseScheduleResponse);
+
+  // Get a course by course ID (Unary RPC)
+  rpc GetCourseById(GetCourseScheduleByIdRequest) returns (GetCourseScheduleByIdResponse);
+
+  // Get all courses (Server Streaming RPC)
+  rpc GetAllCourses(GetAllCoursesScheduleRequest) returns (stream GetAllCoursesScheduleResponse);
 }
 
-message ResourceAvailabilityResponse {
-  string resource_id = 1;
-  repeated int64 available_times = 2;
+// Teacher Management Service
+service TeacherManagement {
+  // Add a teacher schedule (Unary RPC)
+  rpc AddTeacherSchedule(AddTeacherScheduleRequest) returns (AddTeacherScheduleResponse);
+
+  // Get a teacher schedule by teacher ID (Unary RPC)
+  rpc GetTeacherScheduleById(GetTeacherScheduleByIdRequest) returns (GetTeacherScheduleByIdResponse);
+
+  // Update teacher schedules in real-time (Bidirectional Streaming RPC)
+  rpc UpdateTeacherSchedules(stream UpdateTeacherScheduleRequest) returns (stream UpdateTeacherScheduleResponse);
 }
 
-message SchedulingResultResponse {
-  bool success = 1;
+
+// Request and response messages for the methods above
+// Student Management
+message AddStudentScheduleRequest {
+  string student_id = 1;
+  repeated string course_ids = 2;
+}
+
+message AddStudentScheduleResponse {
+  string status = 1;
   string message = 2;
 }
+
+message GetStudentScheduleByIdRequest {
+  string student_id = 1;
+}
+
+message GetStudentScheduleByIdResponse {
+  string student_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateStudentScheduleRequest {
+  string student_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateStudentScheduleResponse {
+  string status = 1;
+  string message = 2;
+}
+
+
+// Course Management
+message AddCourseScheduleRequest {
+  string course_id = 1;
+  repeated string course_day_of_week = 2;
+}
+
+message AddCourseScheduleResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message GetCourseScheduleByIdRequest {
+  string course_id = 1;
+}
+
+message GetCourseScheduleByIdResponse {
+  string course_id = 1;
+  repeated string course_day_of_week = 2;
+}
+
+message GetAllCoursesScheduleRequest {
+  string course_id = 1; // Optional filter to apply when fetching courses based on course name
+}
+
+message GetAllCoursesScheduleResponse {
+  repeated CourseItem course_item = 1;
+}
+
+message CourseItem {
+  string course_id = 1;
+  string course_day_of_week = 2;
+}
+
+
+
+// Teacher Management
+message AddTeacherScheduleRequest {
+  string teacher_id = 1;
+  repeated string course_ids = 2;
+}
+
+message AddTeacherScheduleResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message GetTeacherScheduleByIdRequest {
+  string teacher_id = 1;
+}
+
+message GetTeacherScheduleByIdResponse {
+  string teacher_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateTeacherScheduleRequest {
+  string teacher_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateTeacherScheduleResponse {
+  repeated TeachingItem teaching_item = 1;
+}
+
+message TeachingItem {
+  string teacher_id = 1;
+  string course_ids = 2;
+}
+
 

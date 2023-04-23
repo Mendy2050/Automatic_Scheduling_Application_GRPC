@@ -63,19 +63,19 @@ public class CourseManagementService extends CourseManagementImplBase {
     public void getAllCourses(edu.courseScheduling.GetAllCoursesScheduleRequest request,
             io.grpc.stub.StreamObserver<edu.courseScheduling.GetAllCoursesScheduleResponse> responseObserver) {
 
-        // 模拟数据
+        // emulate data 
         Map<String, List<String>> mockCourseSchedules = new HashMap<>();
         mockCourseSchedules.put("COURSE_1", Arrays.asList("Monday", "Wednesday", "Friday"));
         mockCourseSchedules.put("COURSE_2", Arrays.asList("Tuesday", "Thursday"));
         mockCourseSchedules.put("COURSE_3", Arrays.asList("Monday", "Wednesday"));
 
-        // 遍历模拟数据
+        // traverse the emulate data 
         for (Map.Entry<String, List<String>> entry : mockCourseSchedules.entrySet()) {
-            // 创建一个新的CourseItem列表
+            // create a new CourseItem list
             List<CourseItem> courseItems = new ArrayList<>();
 
             for (String courseDayOfWeek : entry.getValue()) {
-                // 为每个课程天创建一个新的CourseItem
+                // create a new CourseItem for each days_of_week
                 CourseItem courseItem = CourseItem.newBuilder()
                         .setCourseId(entry.getKey())
                         .setCourseDayOfWeek(courseDayOfWeek)
@@ -83,7 +83,7 @@ public class CourseManagementService extends CourseManagementImplBase {
                 courseItems.add(courseItem);
             }
 
-            // 创建一个响应对象，并发送
+            // create a response object and send out
             GetAllCoursesScheduleResponse response = GetAllCoursesScheduleResponse.newBuilder()
                     .addAllCourseItem(courseItems)
                     .build();

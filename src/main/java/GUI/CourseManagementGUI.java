@@ -132,7 +132,7 @@ public class CourseManagementGUI {
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		// 左侧部分
+		// On the left
 		JPanel panelLeft = new JPanel(new GridBagLayout());
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -143,7 +143,7 @@ public class CourseManagementGUI {
 		frame.getContentPane().add(panelLeft, gbc);
 
 		// AddCourseSchedule service panel
-		// Course ID 和 Course ID在同一行
+		// Course ID and Course ID 
 		JLabel lblCourseId = new JLabel("Course ID");
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -174,7 +174,7 @@ public class CourseManagementGUI {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		panelLeft.add(textCourseIds, gbc);
 
-		// 剩下的三个方法名字按钮各自占一行
+		// the three method buttons 
 		gbc.insets = new Insets(10, 10, 10, 10);
 
 		JButton btnAddCourseSchedule = new JButton("Add Course Schedule");
@@ -322,7 +322,7 @@ public class CourseManagementGUI {
 		});
 
 
-		// 右侧部分
+		// the right part
 		JPanel panelRight = new JPanel(new GridBagLayout());
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -332,7 +332,7 @@ public class CourseManagementGUI {
 		gbc.weighty = 1;
 		frame.getContentPane().add(panelRight, gbc);
 
-		// TextArea 在第一行，但是高度略微高点
+		// TextArea 
 		textResponse = new JTextArea(15, 25);
 		textResponse.setLineWrap(true);
 		textResponse.setWrapStyleWord(true);
@@ -347,7 +347,7 @@ public class CourseManagementGUI {
 		gbc.insets = new Insets(10, 10, 5, 10);
 		panelRight.add(scrollPane, gbc);
 
-		// Exit 在右边部分的最下面
+		// Exit button
 		JButton btnExit = new JButton("Exit");
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -359,9 +359,9 @@ public class CourseManagementGUI {
 
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// 关闭channel连接
+				// close channel 
 				channel.shutdown();
-				// 退出应用程序
+				// exit the application 
 				System.exit(0);
 			}
 		});

@@ -3,8 +3,6 @@
 
 package edu.teacherScheduling;
 
-import java.util.List;
-
 /**
  * Protobuf type {@code TeachingItem}
  */
@@ -583,12 +581,12 @@ private static final long serialVersionUID = 0L;
      * <code>string course_ids = 2;</code>
      */
     public Builder setCourseIds(
-        String courseId) {
-      if (courseId == null) {
+        java.lang.String value) {
+      if (value == null) {
     throw new NullPointerException();
   }
   
-      courseIds_ = courseId;
+      courseIds_ = value;
       onChanged();
       return this;
     }

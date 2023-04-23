@@ -134,7 +134,7 @@ public class TeacherManagementGUI {
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		// 左侧部分
+		// the left part
 		JPanel panelLeft = new JPanel(new GridBagLayout());
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -145,7 +145,7 @@ public class TeacherManagementGUI {
 		frame.getContentPane().add(panelLeft, gbc);
 
 		// AddTeacherSchedule service panel
-		// Teacher ID 和 Course ID在同一行
+		// Teacher ID 和 Course IDs 
 		JLabel lblTeacherId = new JLabel("Teacher ID");
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -176,7 +176,7 @@ public class TeacherManagementGUI {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		panelLeft.add(textCourseIds, gbc);
 
-		// 剩下的三个方法名字按钮各自占一行
+		// the three method buttons 
 		gbc.insets = new Insets(10, 10, 10, 10);
 
 		JButton btnAddTeacherSchedule = new JButton("Add Teacher Schedule");
@@ -338,7 +338,7 @@ public class TeacherManagementGUI {
 				});
 
 
-		// 右侧部分
+		// the right part
 		JPanel panelRight = new JPanel(new GridBagLayout());
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -348,7 +348,7 @@ public class TeacherManagementGUI {
 		gbc.weighty = 1;
 		frame.getContentPane().add(panelRight, gbc);
 
-		// TextArea 在第一行，但是高度略微高点
+		// TextArea  
 		textResponse = new JTextArea(15, 25);
 		textResponse.setLineWrap(true);
 		textResponse.setWrapStyleWord(true);
@@ -363,7 +363,7 @@ public class TeacherManagementGUI {
 		gbc.insets = new Insets(10, 10, 5, 10);
 		panelRight.add(scrollPane, gbc);
 
-		// Exit 在右边部分的最下面
+		// Exit button
 		JButton btnExit = new JButton("Exit");
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -375,9 +375,9 @@ public class TeacherManagementGUI {
 
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// 关闭channel连接
+				// close the channel 
 				channel.shutdown();
-				// 退出应用程序
+				// exit the application 
 				System.exit(0);
 			}
 		});

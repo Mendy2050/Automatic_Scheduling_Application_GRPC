@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "edu.studentScheduling";
+option java_outer_classname = "StudentSchedulingServiceImpl";
+
+
+package scheduling;
+
+// Student Management Service
+service StudentManagement {
+  // Add a student schedule (Unary RPC)
+  rpc AddStudentSchedule(AddStudentScheduleRequest) returns (AddStudentScheduleResponse);
+
+  // Get a student schedule by student ID (Unary RPC)
+  rpc GetStudentScheduleById(GetStudentScheduleByIdRequest) returns (GetStudentScheduleByIdResponse);
+
+  // Update student schedules in bulk (Client Streaming RPC)
+  rpc UpdateStudentSchedules(stream UpdateStudentScheduleRequest) returns (UpdateStudentScheduleResponse);
+}
+
+
+
+// Request and response messages for the methods above
+// Student Management
+message AddStudentScheduleRequest {
+  string student_id = 1;
+  repeated string course_ids = 2;
+}
+
+message AddStudentScheduleResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message GetStudentScheduleByIdRequest {
+  string student_id = 1;
+}
+
+message GetStudentScheduleByIdResponse {
+  string student_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateStudentScheduleRequest {
+  string student_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateStudentScheduleResponse {
+  string status = 1;
+  string message = 2;
+}

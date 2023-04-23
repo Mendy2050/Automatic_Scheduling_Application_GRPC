@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "edu.teacherScheduling";
+option java_outer_classname = "TeacherSchedulingServiceImpl";
+
+
+// Teacher Management Service
+service TeacherManagement {
+  // Add a teacher schedule (Unary RPC)
+  rpc AddTeacherSchedule(AddTeacherScheduleRequest) returns (AddTeacherScheduleResponse);
+
+  // Get a teacher schedule by teacher ID (Unary RPC)
+  rpc GetTeacherScheduleById(GetTeacherScheduleByIdRequest) returns (GetTeacherScheduleByIdResponse);
+
+  // Update teacher schedules in real-time (Bidirectional Streaming RPC)
+  rpc UpdateTeacherSchedules(stream UpdateTeacherScheduleRequest) returns (stream UpdateTeacherScheduleResponse);
+}
+
+
+
+// Teacher Management
+message AddTeacherScheduleRequest {
+  string teacher_id = 1;
+  repeated string course_ids = 2;
+}
+
+message AddTeacherScheduleResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message GetTeacherScheduleByIdRequest {
+  string teacher_id = 1;
+}
+
+message GetTeacherScheduleByIdResponse {
+  string teacher_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateTeacherScheduleRequest {
+  string teacher_id = 1;
+  repeated string course_ids = 2;
+}
+
+message UpdateTeacherScheduleResponse {
+  repeated TeachingItem teaching_item = 1;
+}
+
+message TeachingItem {
+  string teacher_id = 1;
+  string course_ids = 2;
+}

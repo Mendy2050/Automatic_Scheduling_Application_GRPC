@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "edu.courseScheduling";
+option java_outer_classname = "CourseSchedulingServiceImpl";
+
+
+// Course Management Service
+service CourseManagement {
+  // Add a course (Unary RPC)
+  rpc AddCourse(AddCourseScheduleRequest) returns (AddCourseScheduleResponse);
+
+  // Get a course by course ID (Unary RPC)
+  rpc GetCourseById(GetCourseScheduleByIdRequest) returns (GetCourseScheduleByIdResponse);
+
+  // Get all courses (Server Streaming RPC)
+  rpc GetAllCourses(GetAllCoursesScheduleRequest) returns (stream GetAllCoursesScheduleResponse);
+}
+
+
+
+// Course Management
+message AddCourseScheduleRequest {
+  string course_id = 1;
+  repeated string course_day_of_week = 2;
+}
+
+message AddCourseScheduleResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message GetCourseScheduleByIdRequest {
+  string course_id = 1;
+}
+
+message GetCourseScheduleByIdResponse {
+  string course_id = 1;
+  repeated string course_day_of_week = 2;
+}
+
+message GetAllCoursesScheduleRequest {
+  string course_id = 1; // Optional filter to apply when fetching courses based on course name
+}
+
+message GetAllCoursesScheduleResponse {
+  repeated CourseItem course_item = 1;
+}
+
+message CourseItem {
+  string course_id = 1;
+  string course_day_of_week = 2;
+}
